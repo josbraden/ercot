@@ -14,6 +14,9 @@ dbuser = "dbuser"
 dbpasswd = "password"
 dbschema = "ercot"
 dbcompress = False
+# These should be fine unless you also altered the schema file
+dbcharset = "utf8mb4"
+dbcollation = "utf8mb4_general_ci"
 # Helptext
 helptext = "Usage: ercotscraper.py foo"
 
