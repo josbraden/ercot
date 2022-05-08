@@ -21,13 +21,3 @@ py_compile:
     - apt install -y python3 -qq
   script:
     - python3 -m py_compile *.py
-test_parser:
-  stage: test
-  needs: []
-  before_script:
-    - apt update -qq
-    - apt install -y python3 python3-mysql.connector python3-pip -qq
-    - pip3 install bs4
-    - echo "" > tests/empty.html
-  script:
-    - python3 kwparser.py test
