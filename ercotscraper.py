@@ -7,7 +7,7 @@ import sys
 import mysql.connector
 
 # Variables
-version = "v0.1"
+version = "v0.0"
 # DB Stuff
 dbhost = "127.0.0.1"
 dbuser = "dbuser"
@@ -47,7 +47,7 @@ def testMySQL():
 
 
 # Execution start
-print("Starting kingwood scraper " + version)
+print("Starting ercot scraper " + version)
 if testMySQL() != 0:
     sys.exit(1)
 
