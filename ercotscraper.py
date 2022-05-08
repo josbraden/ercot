@@ -4,10 +4,16 @@
 
 # Imports
 import sys
+import requests
 import mysql.connector
+from bs4 import BeautifulSoup
 
 # Variables
 version = "v0.0"
+# Ercot stuff
+baseUrl = "http://mis.ercot.com"
+reportBaseUrl = "/misapp/GetReports.do?reportTypeId="
+docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId=837782145"
 # DB Stuff
 dbhost = "127.0.0.1"
 dbuser = "dbuser"
@@ -44,6 +50,18 @@ def testMySQL():
         connectioncursor.close()
         connection.close()
         return 0
+
+
+# Function to get the list of available documents for a given report
+def getDocs(reportId):
+    url = baseUrl + reportBaseUrl + reportId
+    req = requests.get(url)
+    if req.status_code != 200:
+        print("Error getting document list!")
+        return -1
+
+    soup = BeautifulSoup(req.content, "html.parser")
+    # TODO soup parsing
 
 
 # Execution start
