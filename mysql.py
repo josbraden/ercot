@@ -5,6 +5,7 @@
 import mysql.connector
 
 # DB Variables
+# TODO probably put these into a config file
 dbhost = "127.0.0.1"
 dbuser = "dbuser"
 dbpasswd = "password"
@@ -71,3 +72,25 @@ def checkDbExistence(ercot_doc_id, table):
         connectioncursor.close()
         connection.close()
         return ret
+
+
+# Function to add a row to the download log table
+def addDownload(ercot_report_id, ercot_doc_id, status_code):
+    query = "INSERT INTO downloads "
+    query += "(ercot_report_id, ercot_doc_id, status_code) VALUES ("
+    query += str(ercot_report_id) + "," + str(ercot_doc_id) + "," + str(status_code) + ")"
+    try:
+        connection = mysql.connector.connect(
+            host=dbhost, user=dbuser, passwd=dbpasswd,
+            database=dbschema, compress=dbcompress)
+
+    except mysql.connector.Error as err:
+        print(err)
+
+    else:
+        connection.set_charset_collation(dbcharset, dbcollation)
+        connectioncursor = connection.cursor()
+        connectioncursor.execute(query)
+        connection.commit()
+        connectioncursor.close()
+        connection.close()
