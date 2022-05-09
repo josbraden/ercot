@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from mysql import testMySQL, checkDbExistence, addDownload, insertSolar
+from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar
 
 # Variables
 version = "v0.1"
