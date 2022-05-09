@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 08, 2022 at 03:46 PM
+-- Generation Time: May 09, 2022 at 06:39 PM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -32,6 +32,7 @@ CREATE TABLE `downloads` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `ercot_report_id` int(11) NOT NULL,
   `ercot_doc_id` bigint(11) UNSIGNED NOT NULL,
+  `status_code` int(11) NOT NULL COMMENT 'HTTP status code',
   `downloaded` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -43,7 +44,6 @@ CREATE TABLE `downloads` (
 
 CREATE TABLE `solar` (
   `id` bigint(11) UNSIGNED NOT NULL,
-  `ercot_doc_id` bigint(11) UNSIGNED NOT NULL,
   `SYSTEM_WIDE` float NOT NULL COMMENT 'Solar power generated system wide in MW',
   `datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
