@@ -3,9 +3,12 @@
 # Python script to download report files from Ercot and insert them into a MySQL database for Grafana dashboards
 
 # Library imports
-import sys
+import csv
 import io
+import os
 import requests
+import sys
+import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
@@ -85,6 +88,36 @@ def downloadDocs(ercot_report_id, docUrls):
                 print("Continue")
                 z = zipfile.ZipFile(io.BytesIO(req.content))
                 z.extractall(tempdir)
+
+
+# Report function for solar
+def report_solar():
+    ercot_report_id = 13484
+    docList = getDocList(ercot_report_id)
+    if len(docList) == 0:
+        return -1
+
+    downloadDocs(ercot_report_id, docList)
+    # Process downloaded CSVs
+    for filename in os.listdir(tempdir):
+        csvData = []
+        fp = open(filename, "r")
+        csvReader = csv.reader(fp, delimiter=',')
+        # Read this file into RAM
+        for row in csvReader:
+            csvData.append(row)
+
+        fp.close()
+        for i in range(1, len(csvData)):
+            queryData = ""
+            sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
+            queryData = str(csvData[i][1]) + "," + sqlDateTime
+            # TODO write this
+            #insertSolar(queryData)
+
+        os.remove(filename)
+
+    return 0
 
 
 # Execution start
