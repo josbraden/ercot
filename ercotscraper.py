@@ -2,10 +2,11 @@
 # @author Josh Braden
 # Python script to download report files from Ercot and insert them into a MySQL database for Grafana dashboards
 
-# Imports
+# Library imports
 import sys
 import requests
 from bs4 import BeautifulSoup
+# File imports
 from mysql import testMySQL, checkDbExistence
 
 # Variables
