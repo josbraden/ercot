@@ -42,7 +42,7 @@ def testMySQL():
     else:
         connection.set_charset_collation(dbcharset, dbcollation)
         connectioncursor = connection.cursor()
-        connectioncursor.execute("SELECT COUNT(*) FROM messageGrabs")
+        connectioncursor.execute("SELECT COUNT(*) FROM downloads")
         connresult = connectioncursor.fetchone()
         for i in connresult:
             print("Success")
