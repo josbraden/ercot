@@ -31,7 +31,7 @@ helptext = "Usage: ercotscraper.py foo"
 def getDocList(reportId):
     docUrls = []
     docIds = []
-    url = baseUrl + reportBaseUrl + reportId
+    url = baseUrl + reportBaseUrl + str(reportId)
     req = requests.get(url)
     if req.status_code != 200:
         print("Error getting document list!")
@@ -101,7 +101,8 @@ def report_solar():
     # Process downloaded CSVs
     for filename in os.listdir(tempdir):
         csvData = []
-        fp = open(filename, "r")
+        fullFilename = tempdir + "/" + filename
+        fp = open(fullFilename, "r")
         csvReader = csv.reader(fp, delimiter=',')
         # Read this file into RAM
         for row in csvReader:
@@ -111,10 +112,10 @@ def report_solar():
         for i in range(1, len(csvData)):
             queryData = ""
             sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
-            queryData = str(csvData[i][1]) + "," + sqlDateTime
+            queryData = str(csvData[i][1]) + ",'" + sqlDateTime + "'"
             insertSolar(queryData)
 
-        os.remove(filename)
+        os.remove(fullFilename)
 
     return 0
 
