@@ -22,7 +22,7 @@ helptext = "Usage: ercotscraper.py foo"
 # Function to get the list of available documents for a given report
 # Input: one report ID
 # Output: List of documents on the server that haven't been downloaded
-def getDocs(reportId):
+def getDocList(reportId):
     docUrls = []
     docIds = []
     url = baseUrl + reportBaseUrl + reportId
