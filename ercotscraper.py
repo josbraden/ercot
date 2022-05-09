@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from mysql import testMySQL, checkDbExistence, addDownload, insertSolar
 
 # Variables
-version = "v0.0"
+version = "v0.1"
 tempdir = "./tmp"
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
@@ -130,5 +130,5 @@ if len(sys.argv) == 2:
         print(helptext)
 
 else:
-    # Continue
-    print("foo")
+    # Run through defined reports
+    report_solar()
