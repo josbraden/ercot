@@ -94,3 +94,25 @@ def addDownload(ercot_report_id, ercot_doc_id, status_code):
         connection.commit()
         connectioncursor.close()
         connection.close()
+
+
+# Function to insert a row to the solar table
+def insertSolar(queryData):
+    query = "INSERT INTO solar "
+    query += "(SYSTEM_WIDE, datetime) VALUES ("
+    query += queryData + ")"
+    try:
+        connection = mysql.connector.connect(
+            host=dbhost, user=dbuser, passwd=dbpasswd,
+            database=dbschema, compress=dbcompress)
+
+    except mysql.connector.Error as err:
+        print(err)
+
+    else:
+        connection.set_charset_collation(dbcharset, dbcollation)
+        connectioncursor = connection.cursor()
+        connectioncursor.execute(query)
+        connection.commit()
+        connectioncursor.close()
+        connection.close()
