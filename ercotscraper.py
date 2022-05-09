@@ -9,7 +9,7 @@ import requests
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from mysql import testMySQL, checkDbExistence
+from mysql import testMySQL, checkDbExistence, addDownload
 
 # Variables
 version = "v0.0"
@@ -76,14 +76,11 @@ def downloadDocs(ercot_report_id, docUrls):
         id = docUrls[i].split("=")[-1]
         req = requests.get(docUrls[i])
         if req.status_code != 200:
-            print("Log error")
-            # TODO define this
-            #addDownload(ercot_report_id, docUrls[i], req.status_code)
+            addDownload(ercot_report_id, id, req.status_code)
 
         else:
-            # TODO define this
-            #addDownload(ercot_report_id, docUrls[i], req.status_code)
-            # Discard XML files
+            addDownload(ercot_report_id, id, req.status_code)
+            # Discard XML files, unzip CSV files
             if "csv.zip" in req.headers['Content-Disposition']:
                 print("Continue")
                 z = zipfile.ZipFile(io.BytesIO(req.content))
