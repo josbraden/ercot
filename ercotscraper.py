@@ -4,13 +4,16 @@
 
 # Library imports
 import sys
+import io
 import requests
+import zipfile
 from bs4 import BeautifulSoup
 # File imports
 from mysql import testMySQL, checkDbExistence
 
 # Variables
 version = "v0.0"
+tempdir = "./tmp"
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
 reportBaseUrl = "/misapp/GetReports.do?reportTypeId="
@@ -63,6 +66,28 @@ def getDocList(reportId):
         docUrls.append(url)
 
     return docUrls
+
+
+# Function to download data files from a docUrls array
+# Input is the report ID and list of documents, outputs unzipped CSV files into the temp directory
+# Additional output is download logs to the database
+def downloadDocs(ercot_report_id, docUrls):
+    for i in range(0, len(docUrls)):
+        id = docUrls[i].split("=")[-1]
+        req = requests.get(docUrls[i])
+        if req.status_code != 200:
+            print("Log error")
+            # TODO define this
+            #addDownload(ercot_report_id, docUrls[i], req.status_code)
+
+        else:
+            # TODO define this
+            #addDownload(ercot_report_id, docUrls[i], req.status_code)
+            # Discard XML files
+            if "csv.zip" in req.headers['Content-Disposition']:
+                print("Continue")
+                z = zipfile.ZipFile(io.BytesIO(req.content))
+                z.extractall(tempdir)
 
 
 # Execution start
