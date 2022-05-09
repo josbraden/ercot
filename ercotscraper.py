@@ -13,7 +13,7 @@ version = "v0.0"
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
 reportBaseUrl = "/misapp/GetReports.do?reportTypeId="
-docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId=837782145"
+docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId="
 # DB Stuff
 dbhost = "127.0.0.1"
 dbuser = "dbuser"
@@ -53,15 +53,51 @@ def testMySQL():
 
 
 # Function to get the list of available documents for a given report
+# Input: one report ID
+# Output: List of documents on the server that haven't been downloaded
 def getDocs(reportId):
+    docUrls = []
+    docIds = []
     url = baseUrl + reportBaseUrl + reportId
     req = requests.get(url)
     if req.status_code != 200:
         print("Error getting document list!")
-        return -1
+        docUrls.clear()
+        return docUrls
 
     soup = BeautifulSoup(req.content, "html.parser")
-    # TODO soup parsing
+    # Build URL array
+    for link in soup.find_all('a'):
+        docUrls.append(link.get('href'))
+
+    # Build ID array
+    for url in docUrls:
+        id = url.split("=")[-1]
+        docIds.append(id)
+
+    # Check if IDs exist in the database
+    # First, set existing IDs to null
+    for i in range(0, len(docIds)):
+        # TODO import this function
+        #if checkDbExistence(id, "downloads"):
+        #    docIds[i] = 0
+        print("Placeholder")
+
+    # Then remove null values
+    # From: https://www.delftstack.com/howto/python/python-list-remove-all/
+    try:
+        while True:
+            docIds.remove(0)
+    except ValueError:
+        pass
+
+    # Rebuild URL list with docs that need to be downloaded
+    docUrls.clear()
+    for id in docIds:
+        url = baseUrl + docBaseUrl + str(id)
+        docUrls.append(url)
+
+    return docUrls
 
 
 # Execution start
