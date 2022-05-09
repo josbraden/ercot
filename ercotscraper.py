@@ -44,10 +44,8 @@ def getDocs(reportId):
     # Check if IDs exist in the database
     # First, set existing IDs to null
     for i in range(0, len(docIds)):
-        # TODO import this function
-        #if checkDbExistence(id, "downloads"):
-        #    docIds[i] = 0
-        print("Placeholder")
+        if checkDbExistence(id, "downloads"):
+            docIds[i] = 0
 
     # Then remove null values
     # From: https://www.delftstack.com/howto/python/python-list-remove-all/
