@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from mysql import testMySQL, checkDbExistence, addDownload
+from mysql import testMySQL, checkDbExistence, addDownload, insertSolar
 
 # Variables
 version = "v0.0"
@@ -112,8 +112,7 @@ def report_solar():
             queryData = ""
             sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
             queryData = str(csvData[i][1]) + "," + sqlDateTime
-            # TODO write this
-            #insertSolar(queryData)
+            insertSolar(queryData)
 
         os.remove(filename)
 
