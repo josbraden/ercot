@@ -6,7 +6,7 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
-from mysql import *
+from mysql import testMySQL, checkDbExistence
 
 # Variables
 version = "v0.0"
