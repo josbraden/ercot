@@ -5,6 +5,7 @@
 import mysql.connector
 from ercotconfig import dbhost, dbuser, dbpasswd, dbschema, dbcompress, dbcharset, dbcollation
 
+
 # Function to test database connection
 def testMySQL():
     try:
