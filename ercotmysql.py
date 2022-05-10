@@ -133,3 +133,28 @@ def insertWind(queryData):
     finally:
         connectioncursor.close()
         connection.close()
+
+
+# Function to insert a row to the demand table
+def insertDemand(queryData):
+    query = "INSERT INTO demand "
+    query += "(Demand, datetime) VALUES ("
+    query += queryData + ")"
+    try:
+        connection = mysql.connector.connect(
+            host=dbhost, user=dbuser, passwd=dbpasswd,
+            database=dbschema, compress=dbcompress)
+    except mysql.connector.Error as err:
+        print(err)
+    else:
+        connection.set_charset_collation(dbcharset, dbcollation)
+        connectioncursor = connection.cursor()
+        try:
+            connectioncursor.execute(query)
+            connection.commit()
+        except mysql.connector.errors.IntegrityError:
+            # Duplicate entry, ignore
+            pass
+    finally:
+        connectioncursor.close()
+        connection.close()

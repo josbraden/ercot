@@ -205,6 +205,47 @@ def report_wind():
     return 0
 
 
+# Demand report
+# Need to concatenate the first two columns to get the datetime correct
+def report_demand():
+    ercot_report_id = 12340
+    if verbose:
+        print("Running demand")
+
+    docList = getDocList(ercot_report_id)
+    if len(docList) == 0:
+        return -1
+
+    downloadDocs(ercot_report_id, docList)
+    # Process downloaded CSVs
+    if verbose:
+        print("Processing demand CSVs")
+
+    for filename in os.listdir(tempdir):
+        csvData = []
+        fullFilename = tempdir + "/" + filename
+        fp = open(fullFilename, "r")
+        csvReader = csv.reader(fp, delimiter=',')
+        # Read this file into RAM
+        for row in csvReader:
+            csvData.append(row)
+
+        fp.close()
+        for i in range(1, len(csvData)):
+            queryData = ""
+            tempDateTime = str(csvData[i][0]) + " " + str(csvData[i][1])
+            sqlDateTime = datetime.datetime.strptime(tempDateTime, '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
+            queryData = str(csvData[i][2]) + ",'" + sqlDateTime + "'"
+            #insertDemand(queryData)
+
+        os.remove(fullFilename)
+
+    if verbose:
+        print("Finished demand")
+
+    return 0
+
+
 # Execution start
 if len(sys.argv) == 2:
     if sys.argv[1] == "help" or sys.argv[1] == "-h":
