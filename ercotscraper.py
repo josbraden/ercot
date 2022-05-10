@@ -25,6 +25,12 @@ docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId
 helptext = "Usage: ercotscraper.py foo"
 
 
+# Function to make sure required folders exist
+def checkDir():
+    if not os.path.exists(tempdir):
+        os.makedirs(tempdir)
+
+
 # Function to get the list of available documents for a given report
 # Input: one report ID
 # Output: List of documents on the server that haven't been downloaded
@@ -131,5 +137,7 @@ if len(sys.argv) == 2:
         print(helptext)
 
 else:
+    # Startup checks
+    checkDir()
     # Run through defined reports
     report_solar()
