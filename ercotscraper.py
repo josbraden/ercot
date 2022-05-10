@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind
+from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind, insertDemand
 from ercotconfig import tempdir
 
 # Variables
