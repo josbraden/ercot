@@ -3,18 +3,7 @@
 
 # Imports
 import mysql.connector
-
-# DB Variables
-# TODO probably put these into a config file
-dbhost = "127.0.0.1"
-dbuser = "dbuser"
-dbpasswd = "password"
-dbschema = "ercot"
-dbcompress = False
-# These should be fine unless you also altered the schema file
-dbcharset = "utf8mb4"
-dbcollation = "utf8mb4_general_ci"
-
+from ercotconfig import dbhost, dbuser, dbpasswd, dbschema, dbcompress, dbcharset, dbcollation
 
 # Function to test database connection
 def testMySQL():
