@@ -69,7 +69,7 @@ def getDocList(reportId):
     # Check if IDs exist in the database
     # First, set existing IDs to null
     for i in range(0, len(docIds)):
-        if checkDbExistence(id, "downloads"):
+        if checkDbExistence(docIds[i], "downloads"):
             docIds[i] = 0
 
     # Then remove null values
