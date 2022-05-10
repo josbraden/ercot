@@ -209,6 +209,7 @@ def report_wind():
 
 # Demand report
 # Need to concatenate the first two columns to get the datetime correct
+# Also, these files have an empty line at the end, which needs to be ignored
 def report_demand():
     ercot_report_id = 12340
     if verbose:
@@ -233,12 +234,12 @@ def report_demand():
             csvData.append(row)
 
         fp.close()
-        for i in range(1, len(csvData)):
+        for i in range(1, (len(csvData) - 1)):
             queryData = ""
             tempDateTime = str(csvData[i][0]) + " " + str(csvData[i][1])
             sqlDateTime = datetime.datetime.strptime(tempDateTime, '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
             queryData = str(csvData[i][2]) + ",'" + sqlDateTime + "'"
-            #insertDemand(queryData)
+            insertDemand(queryData)
 
         os.remove(fullFilename)
 
