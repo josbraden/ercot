@@ -13,10 +13,10 @@ import zipfile
 from bs4 import BeautifulSoup
 # File imports
 from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar
+from ercotconfig import tempdir
 
 # Variables
 version = "v0.1"
-tempdir = "./tmp"
 verbose = False
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
