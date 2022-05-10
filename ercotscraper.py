@@ -98,7 +98,9 @@ def getDocList(reportId):
 def downloadDocs(ercot_report_id, docUrls):
     dlknt = 0
     extractknt = 0
-    for i in range(0, len(docUrls)):
+    #for i in range(0, len(docUrls)):
+    # Testing
+    for i in range(0, 5):
         id = docUrls[i].split("=")[-1]
         req = requests.get(docUrls[i])
         if req.status_code != 200:
@@ -271,5 +273,7 @@ if verbose:
 # Startup checks
 checkDir()
 # Run through defined reports
-report_solar()
-report_wind()
+# Testing
+#report_solar()
+#report_wind()
+report_demand()
