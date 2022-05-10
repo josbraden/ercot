@@ -102,7 +102,7 @@ def insertSolar(queryData):
         try:
             connectioncursor.execute(query)
             connection.commit()
-        except mysql.connector.errors.IntegrityError as err:
+        except mysql.connector.errors.IntegrityError:
             # Duplicate entry, ignore
             pass
     finally:
