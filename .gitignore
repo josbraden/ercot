@@ -1,4 +1,5 @@
 # Extra stuff added by me
+ercotconfig.py
 *.zip
 *.csv
 tmp/
