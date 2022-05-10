@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 10, 2022 at 01:58 PM
+-- Generation Time: May 10, 2022 at 03:06 PM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -48,6 +48,21 @@ CREATE TABLE `solar` (
   `datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wind`
+--
+
+CREATE TABLE `wind` (
+  `id` bigint(11) UNSIGNED NOT NULL,
+  `SYSTEM_WIDE` float NOT NULL COMMENT 'Wind power generated system wide in MW',
+  `LZ_SOUTH_HOUSTON` float NOT NULL,
+  `LZ_WEST` float NOT NULL,
+  `LZ_NORTH` float NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
+
 --
 -- Indexes for dumped tables
 --
@@ -67,6 +82,13 @@ ALTER TABLE `solar`
   ADD UNIQUE KEY `datetime` (`datetime`);
 
 --
+-- Indexes for table `wind`
+--
+ALTER TABLE `wind`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `datetime` (`datetime`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -80,6 +102,12 @@ ALTER TABLE `downloads`
 -- AUTO_INCREMENT for table `solar`
 --
 ALTER TABLE `solar`
+  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `wind`
+--
+ALTER TABLE `wind`
   MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
