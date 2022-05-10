@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 09, 2022 at 06:39 PM
+-- Generation Time: May 10, 2022 at 01:58 PM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -63,7 +63,8 @@ ALTER TABLE `downloads`
 -- Indexes for table `solar`
 --
 ALTER TABLE `solar`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `datetime` (`datetime`);
 
 --
 -- AUTO_INCREMENT for dumped tables
