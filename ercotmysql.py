@@ -18,7 +18,6 @@ dbcollation = "utf8mb4_general_ci"
 
 # Function to test database connection
 def testMySQL():
-    print("Testing database connection...", end='')
     try:
         connection = mysql.connector.connect(
             host=dbhost, user=dbuser, passwd=dbpasswd,
@@ -34,7 +33,7 @@ def testMySQL():
         connectioncursor.execute("SELECT COUNT(*) FROM downloads")
         connresult = connectioncursor.fetchone()
         for i in connresult:
-            print("Success")
+            pass
 
         connectioncursor.close()
         connection.close()
