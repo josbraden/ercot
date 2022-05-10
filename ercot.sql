@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 10, 2022 at 03:06 PM
+-- Generation Time: May 10, 2022 at 05:12 PM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -25,6 +25,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `demand`
+--
+
+CREATE TABLE `demand` (
+  `id` bigint(11) UNSIGNED NOT NULL,
+  `Demand` float NOT NULL COMMENT 'Total system demand',
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='System-wide demand';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `downloads`
 --
 
@@ -34,7 +46,7 @@ CREATE TABLE `downloads` (
   `ercot_doc_id` bigint(11) UNSIGNED NOT NULL,
   `status_code` int(11) NOT NULL COMMENT 'HTTP status code',
   `downloaded` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='"Meta" table to track which documents have been downloaded';
 
 -- --------------------------------------------------------
 
@@ -61,11 +73,18 @@ CREATE TABLE `wind` (
   `LZ_WEST` float NOT NULL,
   `LZ_NORTH` float NOT NULL,
   `datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide wind generation';
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `demand`
+--
+ALTER TABLE `demand`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `datetime` (`datetime`);
 
 --
 -- Indexes for table `downloads`
@@ -91,6 +110,12 @@ ALTER TABLE `wind`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `demand`
+--
+ALTER TABLE `demand`
+  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `downloads`
