@@ -94,14 +94,17 @@ def insertSolar(queryData):
         connection = mysql.connector.connect(
             host=dbhost, user=dbuser, passwd=dbpasswd,
             database=dbschema, compress=dbcompress)
-
     except mysql.connector.Error as err:
         print(err)
-
     else:
         connection.set_charset_collation(dbcharset, dbcollation)
         connectioncursor = connection.cursor()
-        connectioncursor.execute(query)
-        connection.commit()
+        try:
+            connectioncursor.execute(query)
+            connection.commit()
+        except mysql.connector.errors.IntegrityError as err:
+            # Duplicate entry, ignore
+            pass
+    finally:
         connectioncursor.close()
         connection.close()
