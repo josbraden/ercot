@@ -108,3 +108,28 @@ def insertSolar(queryData):
     finally:
         connectioncursor.close()
         connection.close()
+
+
+# Function to insert a row to the wind table
+def insertWind(queryData):
+    query = "INSERT INTO wind "
+    query += "(SYSTEM_WIDE, LZ_SOUTH_HOUSTON, LZ_WEST, LZ_NORTH, datetime) VALUES ("
+    query += queryData + ")"
+    try:
+        connection = mysql.connector.connect(
+            host=dbhost, user=dbuser, passwd=dbpasswd,
+            database=dbschema, compress=dbcompress)
+    except mysql.connector.Error as err:
+        print(err)
+    else:
+        connection.set_charset_collation(dbcharset, dbcollation)
+        connectioncursor = connection.cursor()
+        try:
+            connectioncursor.execute(query)
+            connection.commit()
+        except mysql.connector.errors.IntegrityError:
+            # Duplicate entry, ignore
+            pass
+    finally:
+        connectioncursor.close()
+        connection.close()

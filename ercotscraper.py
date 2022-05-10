@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar
+from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind
 from ercotconfig import tempdir
 
 # Variables
@@ -127,7 +127,7 @@ def downloadDocs(ercot_report_id, docUrls):
         print("Extracted: " + str(extractknt) + " files")
 
 
-# Report function for solar
+# Solar power report
 def report_solar():
     ercot_report_id = 13484
     if verbose:
@@ -166,6 +166,45 @@ def report_solar():
     return 0
 
 
+# Wind power report
+def report_wind():
+    ercot_report_id = 13071
+    if verbose:
+        print("Running wind")
+
+    docList = getDocList(ercot_report_id)
+    if len(docList) == 0:
+        return -1
+
+    downloadDocs(ercot_report_id, docList)
+    # Process downloaded CSVs
+    if verbose:
+        print("Processing wind CSVs")
+
+    for filename in os.listdir(tempdir):
+        csvData = []
+        fullFilename = tempdir + "/" + filename
+        fp = open(fullFilename, "r")
+        csvReader = csv.reader(fp, delimiter=',')
+        # Read this file into RAM
+        for row in csvReader:
+            csvData.append(row)
+
+        fp.close()
+        for i in range(1, len(csvData)):
+            queryData = ""
+            sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
+            queryData = str(csvData[i][1]) + "," + str(csvData[i][2]) + "," + str(csvData[i][3]) + "," + str(csvData[i][4]) + ",'" + sqlDateTime + "'"
+            insertWind(queryData)
+
+        os.remove(fullFilename)
+
+    if verbose:
+        print("Finished wind")
+
+    return 0
+
+
 # Execution start
 if len(sys.argv) == 2:
     if sys.argv[1] == "help" or sys.argv[1] == "-h":
@@ -192,3 +231,4 @@ if verbose:
 checkDir()
 # Run through defined reports
 report_solar()
+report_wind()
