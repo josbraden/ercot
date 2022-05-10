@@ -17,12 +17,13 @@ from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar
 # Variables
 version = "v0.1"
 tempdir = "./tmp"
+verbose = False
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
 reportBaseUrl = "/misapp/GetReports.do?reportTypeId="
 docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId="
 # Helptext
-helptext = "Usage: ercotscraper.py foo"
+helptext = "Usage: ercotscraper.py [-h|help] [-v]"
 
 
 # Function to make sure required folders exist
@@ -35,14 +36,22 @@ def checkDir():
 # Input: one report ID
 # Output: List of documents on the server that haven't been downloaded
 def getDocList(reportId):
+    if verbose:
+        print("Grabbing doc list...", end='')
+
     docUrls = []
     docIds = []
     url = baseUrl + reportBaseUrl + str(reportId)
     req = requests.get(url)
     if req.status_code != 200:
-        print("Error getting document list!")
+        if verbose:
+            print("Error getting document list!")
+
         docUrls.clear()
         return docUrls
+
+    if verbose:
+        print("Success")
 
     soup = BeautifulSoup(req.content, "html.parser")
     # Build URL array
@@ -53,6 +62,9 @@ def getDocList(reportId):
     for url in docUrls:
         id = url.split("=")[-1]
         docIds.append(id)
+
+    if verbose:
+        print("Parsed " + str(len(docIds)) + " documents")
 
     # Check if IDs exist in the database
     # First, set existing IDs to null
@@ -74,6 +86,9 @@ def getDocList(reportId):
         url = baseUrl + docBaseUrl + str(id)
         docUrls.append(url)
 
+    if verbose:
+        print(str(len(docUrls)) + " documents to download")
+
     return docUrls
 
 
@@ -81,30 +96,52 @@ def getDocList(reportId):
 # Input is the report ID and list of documents, outputs unzipped CSV files into the temp directory
 # Additional output is download logs to the database
 def downloadDocs(ercot_report_id, docUrls):
+    dlknt = 0
+    extractknt = 0
     for i in range(0, len(docUrls)):
         id = docUrls[i].split("=")[-1]
         req = requests.get(docUrls[i])
         if req.status_code != 200:
+            if verbose:
+                print("Failed to download: " + str(id))
+
             addDownload(ercot_report_id, id, req.status_code)
 
         else:
+            if verbose:
+                print("Downloaded: " + str(id))
+
             addDownload(ercot_report_id, id, req.status_code)
+            dlknt += 1
             # Discard XML files, unzip CSV files
             if "csv.zip" in req.headers['Content-Disposition']:
                 print("Continue")
                 z = zipfile.ZipFile(io.BytesIO(req.content))
                 z.extractall(tempdir)
+                extractknt += 1
+                if verbose:
+                    print("Extracted: " + str(id))
+
+    if verbose:
+        print("Downloaded " + str(dlknt) + " files")
+        print("Extracted: " + str(extractknt) + " files")
 
 
 # Report function for solar
 def report_solar():
     ercot_report_id = 13484
+    if verbose:
+        print("Running solar")
+
     docList = getDocList(ercot_report_id)
     if len(docList) == 0:
         return -1
 
     downloadDocs(ercot_report_id, docList)
     # Process downloaded CSVs
+    if verbose:
+        print("Processing solar CSVs")
+
     for filename in os.listdir(tempdir):
         csvData = []
         fullFilename = tempdir + "/" + filename
@@ -123,21 +160,35 @@ def report_solar():
 
         os.remove(fullFilename)
 
+    if verbose:
+        print("Finished solar")
+
     return 0
 
 
 # Execution start
-print("Starting ercot scraper " + version)
-if testMySQL() != 0:
-    sys.exit(1)
-
 if len(sys.argv) == 2:
     if sys.argv[1] == "help" or sys.argv[1] == "-h":
-        # Print helptext
         print(helptext)
+        sys.exit(0)
+
+    elif sys.argv[1] == "-v":
+        verbose = True
+
+if testMySQL() != 0:
+    if verbose:
+        print("Failed to connect to MySQL, check credentials")
+
+    sys.exit(1)
 
 else:
-    # Startup checks
-    checkDir()
-    # Run through defined reports
-    report_solar()
+    if verbose:
+        print("Successfully connected to MySQL")
+
+if verbose:
+    print("Starting ercot scraper " + version)
+
+# Startup checks
+checkDir()
+# Run through defined reports
+report_solar()
