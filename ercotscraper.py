@@ -293,7 +293,7 @@ def report_supply():
 def report_dctieflows():
     ercot_report_id = 12359
     if verbose:
-        print("Running supply")
+        print("Running DC ties")
 
     docList = getDocList(ercot_report_id)
     if len(docList) == 0:
@@ -302,7 +302,7 @@ def report_dctieflows():
     downloadDocs(ercot_report_id, docList)
     # Process downloaded CSVs
     if verbose:
-        print("Processing supply CSVs")
+        print("Processing DC ties CSVs")
 
     for filename in os.listdir(tempdir):
         csvData = []
@@ -317,7 +317,7 @@ def report_dctieflows():
         for i in range(1, (len(csvData) - 1)):
             queryData = ""
             sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
-            queryData = str(csvData[i][2]) + "," + str(csvData[i][3]) + ",'" + sqlDateTime + "'"
+            queryData = "'" + str(csvData[i][2]) + "'," + str(csvData[i][3]) + ",'" + sqlDateTime + "'"
             insertTieFlow(queryData)
 
         os.remove(fullFilename)
