@@ -326,9 +326,109 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 17,
-        "w": 24,
+        "h": 15,
+        "w": 12,
         "x": 0,
+        "y": 16
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  SYSTEM_WIDE\nFROM solar\nWHERE\n  $__timeFilter(datetime)\nORDER BY datetime",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Solar MW",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${DS_ERCOT}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 12,
+        "x": 12,
         "y": 16
       },
       "id": 3,
@@ -516,9 +616,9 @@
         "h": 16,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 31
       },
-      "id": 2,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": [],
@@ -535,7 +635,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  SYSTEM_WIDE\nFROM solar\nWHERE\n  $__timeFilter(datetime)\nORDER BY datetime",
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  MW_TIE AS DC_L\nFROM dctieflows\nWHERE\n  $__timeFilter(datetime)\n  AND TIE_LINE_ID = \"DC_L\"\nORDER BY datetime",
           "refId": "A",
           "select": [
             [
@@ -555,9 +655,125 @@
               "type": "macro"
             }
           ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  MW_TIE AS DC_S\nFROM dctieflows\nWHERE\n  $__timeFilter(datetime)\n  AND TIE_LINE_ID = \"DC_S\"\nORDER BY datetime",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "demand",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  MW_TIE AS DC_E\nFROM dctieflows\nWHERE\n  $__timeFilter(datetime)\n  AND TIE_LINE_ID = \"DC_E\"\nORDER BY datetime",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "demand",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  MW_TIE AS DC_N\nFROM dctieflows\nWHERE\n  $__timeFilter(datetime)\n  AND TIE_LINE_ID = \"DC_N\"\nORDER BY datetime",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "demand",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  MW_TIE AS DC_R\nFROM dctieflows\nWHERE\n  $__timeFilter(datetime)\n  AND TIE_LINE_ID = \"DC_R\"\nORDER BY datetime",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "demand",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
         }
       ],
-      "title": "Solar MW",
+      "title": "DC Tie Flows",
       "type": "timeseries"
     },
     {
@@ -616,7 +832,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 49
+        "y": 47
       },
       "id": 5,
       "options": {
@@ -745,7 +961,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 47
       },
       "id": 6,
       "options": {
@@ -834,5 +1050,5 @@
   "timezone": "",
   "title": "Ercot",
   "uid": "PDSHpU_7k",
-  "version": 22
+  "version": 24
 }
