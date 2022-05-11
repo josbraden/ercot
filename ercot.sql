@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 10, 2022 at 05:12 PM
+-- Generation Time: May 11, 2022 at 11:00 AM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -51,6 +51,21 @@ CREATE TABLE `downloads` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `generation`
+--
+
+CREATE TABLE `generation` (
+  `id` bigint(11) UNSIGNED NOT NULL,
+  `SE_MW` float NOT NULL COMMENT 'State estimator - MW',
+  `SE_MVAR` float NOT NULL COMMENT 'State estimator - MVAR',
+  `SCADA_MW` float NOT NULL COMMENT 'SCADA - MW',
+  `SCADA_MVAR` float NOT NULL COMMENT 'SCADA - MVAR',
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Total ERCOT Generation';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `solar`
 --
 
@@ -94,6 +109,13 @@ ALTER TABLE `downloads`
   ADD UNIQUE KEY `ercot_doc_id` (`ercot_doc_id`);
 
 --
+-- Indexes for table `generation`
+--
+ALTER TABLE `generation`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `datetime` (`datetime`);
+
+--
 -- Indexes for table `solar`
 --
 ALTER TABLE `solar`
@@ -122,6 +144,12 @@ ALTER TABLE `demand`
 --
 ALTER TABLE `downloads`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `generation`
+--
+ALTER TABLE `generation`
+  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `solar`
