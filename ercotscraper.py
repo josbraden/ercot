@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind, insertDemand, insertSupply
+from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind, insertDemand, insertSupply, insertTieFlow
 from ercotconfig import tempdir
 
 # Variables
@@ -279,6 +279,46 @@ def report_supply():
             sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
             queryData = str(csvData[i][2]) + "," + str(csvData[i][3]) + "," + str(csvData[i][4]) + "," + str(csvData[i][5]) + ",'" + sqlDateTime + "'"
             insertSupply(queryData)
+
+        os.remove(fullFilename)
+
+    if verbose:
+        print("Finished supply")
+
+    return 0
+
+
+# DC tie flow report
+# Probably not going to bother cleaning up their table for them...
+def report_dctieflows():
+    ercot_report_id = 12359
+    if verbose:
+        print("Running supply")
+
+    docList = getDocList(ercot_report_id)
+    if len(docList) == 0:
+        return -1
+
+    downloadDocs(ercot_report_id, docList)
+    # Process downloaded CSVs
+    if verbose:
+        print("Processing supply CSVs")
+
+    for filename in os.listdir(tempdir):
+        csvData = []
+        fullFilename = tempdir + "/" + filename
+        fp = open(fullFilename, "r")
+        csvReader = csv.reader(fp, delimiter=',')
+        # Read this file into RAM
+        for row in csvReader:
+            csvData.append(row)
+
+        fp.close()
+        for i in range(1, (len(csvData) - 1)):
+            queryData = ""
+            sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+            queryData = str(csvData[i][2]) + "," + str(csvData[i][3]) + ",'" + sqlDateTime + "'"
+            insertTieFlow(queryData)
 
         os.remove(fullFilename)
 
