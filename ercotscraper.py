@@ -323,7 +323,7 @@ def report_dctieflows():
         os.remove(fullFilename)
 
     if verbose:
-        print("Finished supply")
+        print("Finished DC ties")
 
     return 0
 
