@@ -276,7 +276,7 @@ def report_supply():
         fp.close()
         for i in range(1, (len(csvData) - 1)):
             queryData = ""
-            sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M').strftime('%Y-%m-%d %H:%M:%S')
+            sqlDateTime = datetime.datetime.strptime(csvData[i][0], '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
             queryData = str(csvData[i][2]) + "," + str(csvData[i][3]) + "," + str(csvData[i][4]) + "," + str(csvData[i][5]) + ",'" + sqlDateTime + "'"
             insertSupply(queryData)
 
