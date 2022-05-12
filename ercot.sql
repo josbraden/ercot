@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 12, 2022 at 10:39 AM
+-- Generation Time: May 12, 2022 at 11:54 AM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `ercot`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dataRetention` ()  BEGIN
+    DELETE FROM downloads WHERE downloaded < (NOW() - INTERVAL 1 MONTH);
+    DELETE FROM solar WHERE datetime < (NOW() - INTERVAL 6 MONTH);
+    DELETE FROM wind WHERE datetime < (NOW() - INTERVAL 6 MONTH);
+    DELETE FROM dctieflows WHERE datetime < (NOW() - INTERVAL 1 YEAR);
+    DELETE FROM demand WHERE datetime < (NOW() - INTERVAL 1 YEAR);
+    DELETE FROM generation WHERE datetime < (NOW() - INTERVAL 1 YEAR);
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -188,6 +203,14 @@ ALTER TABLE `solar`
 --
 ALTER TABLE `wind`
   MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=```root```@```localhost``` EVENT `dataRetentionEvent` ON SCHEDULE EVERY 1 MONTH STARTS '2022-06-01 00:00:00' ON COMPLETION NOT PRESERVE DISABLE DO call dataRetention()$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,4 @@
+# Example crontab entries. Minimum suggested frequency is hourly
+@hourly python3 ercot/ercotscraper.py > /dev/null 2>&1
+# Alternate, log errors to a file
+#@hourly python3 ercot/ercotscraper.py > /dev/null 2> ercot-err.log
