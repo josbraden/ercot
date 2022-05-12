@@ -2,6 +2,15 @@
 
 Python scripts to pull Ercot power reports and store them in MySQL, so they can be displayed in Grafana dashboards
 
+![Dashboard screenshot](./screenshot.png)
+
+Currently the following datasets are included:
+
+- Solar power 5-minute averaged values
+- Wind power 5-minute averaged values
+- System-wide total generation and demand
+- DC tie flows to other power grids
+
 ## Requirements
 
 Requirements to run this system
