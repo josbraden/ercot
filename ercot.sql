@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 11, 2022 at 11:00 AM
+-- Generation Time: May 12, 2022 at 10:39 AM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `ercot`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dctieflows`
+--
+
+CREATE TABLE `dctieflows` (
+  `id` bigint(11) UNSIGNED NOT NULL,
+  `TIE_LINE_ID` varchar(16) NOT NULL,
+  `MW_TIE` double NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
 
 -- --------------------------------------------------------
 
@@ -95,6 +108,13 @@ CREATE TABLE `wind` (
 --
 
 --
+-- Indexes for table `dctieflows`
+--
+ALTER TABLE `dctieflows`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Tie_datetime` (`datetime`,`TIE_LINE_ID`) USING BTREE;
+
+--
 -- Indexes for table `demand`
 --
 ALTER TABLE `demand`
@@ -132,6 +152,12 @@ ALTER TABLE `wind`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `dctieflows`
+--
+ALTER TABLE `dctieflows`
+  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `demand`
