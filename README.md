@@ -34,8 +34,8 @@ Grafana, if you want to use the grafana dashboard
 6. Execute the script to download and insert the data: `python3 ercotscraper.py`
 7. To run on a schedule, set up a cron job. Examples in 'example.crontab'
 8. (Optional) Set up grafana
-  - Connect your MySQL database as a Grafana data source
-  - Import and connect the grafana dashboard
+    - Connect your MySQL database as a Grafana data source
+    - Import and connect the grafana dashboard
 
 ## Misc Notes
 
