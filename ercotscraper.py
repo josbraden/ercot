@@ -12,7 +12,7 @@ import datetime
 import zipfile
 from bs4 import BeautifulSoup
 # File imports
-from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind, insertDemand, insertSupply, insertTieFlow
+from ercotmysql import testMySQL, checkDbExistence, addDownload, insertSolar, insertWind, insertDemand, insertSupply, insertTieFlow, insertPrices
 from ercotconfig import tempdir
 
 # Variables
@@ -328,6 +328,49 @@ def report_dctieflows():
     return 0
 
 
+# System-wide prices report
+# I don't know anything about energy trading so no clue how useful this is
+# Similar to the DC tie flow table, this should be two tables.
+def report_prices():
+    ercot_report_id = 12301
+    if verbose:
+        print("Running prices")
+
+    docList = getDocList(ercot_report_id)
+    if len(docList) == 0:
+        return -1
+
+    downloadDocs(ercot_report_id, docList)
+    # Process downloaded CSVs
+    if verbose:
+        print("Processing prices CSVs")
+
+    for filename in os.listdir(tempdir):
+        csvData = []
+        fullFilename = tempdir + "/" + filename
+        fp = open(fullFilename, "r")
+        csvReader = csv.reader(fp, delimiter=',')
+        # Read this file into RAM
+        for row in csvReader:
+            csvData.append(row)
+
+        fp.close()
+        for i in range(1, (len(csvData) - 1)):
+            queryData = ""
+            # The datetime is a little weird, instead of messing with minutes/seconds I'm just rounding to the hour. Close enough.
+            tempDateTime = str(csvData[i][0]) + " " + str(csvData[i][1]) + ":00:00"
+            sqlDateTime = datetime.datetime.strptime(tempDateTime, '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+            queryData = "'" + str(csvData[i][3]) + "','" + str(csvData[i][4]) + "'," + str(csvData[i][5]) + ",'" + sqlDateTime + "'"
+            insertPrices(queryData)
+
+        os.remove(fullFilename)
+
+    if verbose:
+        print("Finished prices")
+
+    return 0
+
+
 # Execution start
 if len(sys.argv) == 2:
     if sys.argv[1] == "help" or sys.argv[1] == "-h":
@@ -358,3 +401,4 @@ report_wind()
 report_demand()
 report_supply()
 report_dctieflows()
+report_prices()
