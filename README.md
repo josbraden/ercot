@@ -51,3 +51,15 @@ Grafana, if you want to use the grafana dashboard
 The supply dataset seems a bit wonky. It only gets updated once and hour, as opposed to every fifteen minutes like 'demand' and doesn't seem to line up with the official dashboard exactly. I'm not sure if there's a better dataset to use.
 
 The DC tie flow table has a composite key composed of the tie flow ID plus the datetime. This should be split into two tables, one for the tie flows and one for the flow data, but I don't feel like it.
+
+## Contributing
+
+To add a new dataset:
+
+1. Add scrape function in ercotscraper named `report_foobar()`
+2. Add function call to main function
+3. Add insert function in ercotmysql named `insertFooBar()`
+4. Add table to db schema if needed
+5. Add retention to database retention procedure
+6. Create Grafana dashboard
+7. Update the README
