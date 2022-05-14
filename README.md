@@ -1,6 +1,6 @@
 # Ercot
 
-Python scripts to pull Ercot power reports and store them in MySQL, so they can be displayed in Grafana dashboards
+Python scripts to pull Ercot power reports and store them in MySQL, so they can be displayed in Grafana dashboards. Functional, but lots of room for improvement since there's a lot of code duplication.
 
 ![Dashboard screenshot](./screenshot.png)
 
