@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 12, 2022 at 11:54 AM
+-- Generation Time: May 14, 2022 at 11:14 AM
 -- Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -30,6 +30,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `dataRetention` ()  BEGIN
     DELETE FROM downloads WHERE downloaded < (NOW() - INTERVAL 1 MONTH);
     DELETE FROM solar WHERE datetime < (NOW() - INTERVAL 6 MONTH);
     DELETE FROM wind WHERE datetime < (NOW() - INTERVAL 6 MONTH);
+    DELETE FROM prices WHERE datetime < (NOW() - INTERVAL 6 MONTH);
     DELETE FROM dctieflows WHERE datetime < (NOW() - INTERVAL 1 YEAR);
     DELETE FROM demand WHERE datetime < (NOW() - INTERVAL 1 YEAR);
     DELETE FROM generation WHERE datetime < (NOW() - INTERVAL 1 YEAR);
@@ -94,6 +95,20 @@ CREATE TABLE `generation` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `prices`
+--
+
+CREATE TABLE `prices` (
+  `id` bigint(11) UNSIGNED NOT NULL,
+  `SettlementPointName` varchar(32) NOT NULL,
+  `SettlementPointType` varchar(16) NOT NULL,
+  `SettlementPointPrice` float NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Holds 5-minute interval system-wide solar generation';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `solar`
 --
 
@@ -151,6 +166,13 @@ ALTER TABLE `generation`
   ADD UNIQUE KEY `datetime` (`datetime`);
 
 --
+-- Indexes for table `prices`
+--
+ALTER TABLE `prices`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `SettlementName_SettlementType_datetime` (`datetime`,`SettlementPointName`,`SettlementPointType`) USING BTREE;
+
+--
 -- Indexes for table `solar`
 --
 ALTER TABLE `solar`
@@ -190,6 +212,12 @@ ALTER TABLE `downloads`
 -- AUTO_INCREMENT for table `generation`
 --
 ALTER TABLE `generation`
+  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `prices`
+--
+ALTER TABLE `prices`
   MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
