@@ -326,7 +326,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 18,
         "w": 12,
         "x": 0,
         "y": 16
@@ -426,7 +426,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 18,
         "w": 12,
         "x": 12,
         "y": 16
@@ -613,10 +613,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 16,
+        "h": 20,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 34
       },
       "id": 9,
       "options": {
@@ -773,7 +773,107 @@
           ]
         }
       ],
-      "title": "DC Tie Flows",
+      "title": "DC Tie Flows MW",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${DS_ERCOT}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 54
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(datetime) AS \"time\",\n  SettlementPointPrice\nFROM prices\nWHERE\n  SettlementPointName = \"HB_BUSAVG\" AND\n  $__timeFilter(datetime)\nORDER BY datetime",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Average Prices",
       "type": "timeseries"
     },
     {
@@ -832,7 +932,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 47
+        "y": 70
       },
       "id": 5,
       "options": {
@@ -961,7 +1061,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 47
+        "y": 70
       },
       "id": 6,
       "options": {
@@ -1035,7 +1135,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "1h",
+  "refresh": "15m",
   "schemaVersion": 31,
   "style": "dark",
   "tags": [],
@@ -1050,5 +1150,5 @@
   "timezone": "",
   "title": "Ercot",
   "uid": "PDSHpU_7k",
-  "version": 24
+  "version": 29
 }
