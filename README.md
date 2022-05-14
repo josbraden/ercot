@@ -14,7 +14,7 @@ Currently the following datasets are included:
 
 ## Usage
 
-`python3 ercotscraper.py [help|-h] [-v] [--test]`
+`python3 ercotscraper.py [-h] [-v] [--test]`
 
   -h: Print helptext
 
