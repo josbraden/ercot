@@ -381,15 +381,15 @@ def report_prices():
 
 
 # Execution start
-if len(sys.argv) == 2 or len(sys.argv) == 3:
-    if sys.argv[1] == "-h" or sys.argv[2] == "-h":
+if len(sys.argv) == 2:
+    if sys.argv[1] == "-h":
         print(helptext)
         sys.exit(0)
 
-    elif sys.argv[1] == "-v" or sys.argv[2] == "-v":
+    elif sys.argv[1] == "-v":
         verbose = True
 
-    elif sys.argv[1] == "--test" or sys.argv[2] == "--test":
+    elif sys.argv[1] == "--test":
         testmode = True
 
 if testMySQL() != 0:
