@@ -12,6 +12,16 @@ Currently the following datasets are included:
 - DC tie flows to other power grids
 - System-wide prices
 
+## Usage
+
+`python3 ercotscraper.py [help|-h] [-v] [--test]`
+
+  -h: Print helptext
+
+  -v: Print verbose messages, recommended for first run
+
+  --test: Run connectivity tests and exit
+
 ## Requirements
 
 Requirements to run this system

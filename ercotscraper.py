@@ -18,12 +18,13 @@ from ercotconfig import tempdir
 # Variables
 version = "v0.1"
 verbose = False
+testmode = False
 # Ercot stuff
 baseUrl = "http://mis.ercot.com"
 reportBaseUrl = "/misapp/GetReports.do?reportTypeId="
 docBaseUrl = "/misdownload/servlets/mirDownload?mimic_duns=000000000&doclookupId="
 # Helptext
-helptext = "Usage: ercotscraper.py [-h|help] [-v]"
+helptext = "Usage: ercotscraper.py [-h] [-v] [--test]"
 
 
 # Function to make sure required folders exist
@@ -377,19 +378,25 @@ def report_prices():
 
 
 # Execution start
-if len(sys.argv) == 2:
-    if sys.argv[1] == "help" or sys.argv[1] == "-h":
+if len(sys.argv) == 2 or len(sys.argv) == 3:
+    if sys.argv[1] == "-h" or sys.argv[2] == "-h":
         print(helptext)
         sys.exit(0)
 
-    elif sys.argv[1] == "-v":
+    elif sys.argv[1] == "-v" or sys.argv[2] == "-v":
         verbose = True
+
+    elif sys.argv[1] == "--test" or sys.argv[2] == "--test":
+        testmode = True
 
 if testMySQL() != 0:
     if verbose:
         print("Failed to connect to MySQL, check credentials")
 
     sys.exit(1)
+
+if testmode:
+    sys.exit(0)
 
 else:
     if verbose:
