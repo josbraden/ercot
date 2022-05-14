@@ -359,11 +359,11 @@ def report_prices():
             queryData = ""
             # The datetime is a little weird, instead of messing with minutes/seconds I'm just rounding to the hour. Close enough.
             # Also, sometimes there's a 24 instead of 0 for midnight I guess
-            tempHour = csvData[i][1]
-            if tempHour == 24:
-                tempHour = 0
+            tempHour = str(csvData[i][1])
+            if tempHour == "24":
+                tempHour = "0"
 
-            tempDateTime = str(csvData[i][0]) + " " + str(tempHour) + ":00:00"
+            tempDateTime = str(csvData[i][0]) + " " + tempHour + ":00:00"
             sqlDateTime = datetime.datetime.strptime(tempDateTime, '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
             queryData = "'" + str(csvData[i][3]) + "','" + str(csvData[i][4]) + "'," + str(csvData[i][5]) + ",'" + sqlDateTime + "'"
             insertPrices(queryData)
