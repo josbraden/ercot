@@ -10,6 +10,7 @@ Currently the following datasets are included:
 - Wind power 5-minute averaged values
 - System-wide total generation and demand
 - DC tie flows to other power grids
+- System-wide prices
 
 ## Requirements
 
